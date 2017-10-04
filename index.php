@@ -1,28 +1,25 @@
 <?php
     $backgroundImage = "./img/sea.jpg"; 
     
-    
     function getTenRandomImages($imgURLs) {
         // for now, return the first 10 images 
         $imagesToDisplay = array_slice($imgURLs, 0, 10); 
         return $imagesToDisplay; 
     }
     include "./api/pixabayAPI.php"; 
-    if(isset($_GET['category'])){
+    if($_GET['category'] != ""){
             $keyword = $_GET['category'];
-            $imgURLs = getImageURLs($keyword, $_GET['layout']); 
-            $imgsToDisplay = getTenRandomImages($imgURLs); 
-            $backgroundImage = $imgsToDisplay[array_rand($imgsToDisplay)];
     }
-    if (isset($_GET['keyword'])) {
+    else if (isset($_GET['keyword'])) {
         $keyword = $_GET['keyword'];
-        $imgURLs = getImageURLs($keyword, $_GET['layout']); 
-        $imgsToDisplay = getTenRandomImages($imgURLs); 
-        $backgroundImage = $imgsToDisplay[array_rand($imgsToDisplay)]; 
     }
-    
+    else if ($_GET['category'] == "" and !isset($_GET['keyword'])){
+        echo "You didn't enter or select anthing, but here some pictures anyway";
+    }
+    $imgURLs = getImageURLs($keyword, $_GET['layout']); 
+    $imgsToDisplay = getTenRandomImages($imgURLs); 
+    $backgroundImage = $imgsToDisplay[array_rand($imgsToDisplay)]; 
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -69,6 +66,7 @@
                         echo '">'; 
                         echo '<img src="'.$imgsToDisplay[$i].'" alt="...">'; 
                         echo '</div>';    
+                        unset($keyword);
                     } 
                     
                 
